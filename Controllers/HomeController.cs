@@ -10,7 +10,7 @@ namespace ImageEdit.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Photos");
         }
 
         public ActionResult About()

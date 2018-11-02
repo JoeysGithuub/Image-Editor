@@ -127,3 +127,8 @@ C:\Users\smith\workspace\ImageEdit\ImageEdit\obj\Debug\ImageEdit.csproj.CoreComp
 C:\Users\smith\workspace\ImageEdit\ImageEdit\obj\Debug\ImageEdit.csproj.CopyComplete
 C:\Users\smith\workspace\ImageEdit\ImageEdit\obj\Debug\ImageEdit.dll
 C:\Users\smith\workspace\ImageEdit\ImageEdit\obj\Debug\ImageEdit.pdb
+C:\Users\smith\workspace\ImageEdit\ImageEdit\obj\Debug\ImageEdit.Migrations.intialphoto.resources
+C:\Users\smith\workspace\ImageEdit\ImageEdit\obj\Debug\ImageEdit.Migrations.secondUpdate.resources
+C:\Users\smith\workspace\ImageEdit\ImageEdit\obj\Debug\ImageEdit.Migrations.thirdUpdate.resources
+C:\Users\smith\workspace\ImageEdit\ImageEdit\obj\Debug\ImageEdit.Migrations.thirdUpdate1.resources
+C:\Users\smith\workspace\ImageEdit\ImageEdit\obj\Debug\ImageEdit.Migrations.fourthUpdate1.resources

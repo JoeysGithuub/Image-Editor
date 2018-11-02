@@ -8,12 +8,13 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ImageEdit.Models;
+using Microsoft.AspNet.Identity;
 
 namespace ImageEdit.Controllers
 {
     public class PhotosController : Controller
     {
-        private Entities db = new Entities();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Photos
         public ActionResult Index()
@@ -44,7 +45,9 @@ namespace ImageEdit.Controllers
         // GET: Photos/Create
         public ActionResult Create()
         {
-            return View();
+            var vm = new PhotosCreateViewModel();
+            vm.Categories = db.Categories.ToList();
+            return View(vm);
         }
 
         // POST: Photos/Create
@@ -52,16 +55,16 @@ namespace ImageEdit.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ImagePath,UserId,CategoryId")] Photo photo)
+        public ActionResult Create(PhotosCreateViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                db.Photos.Add(photo);
+                db.Photos.Add(vm.Photo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(photo);
+            return View(vm);
         }
 
         // GET: Photos/Edit/5
@@ -76,7 +79,11 @@ namespace ImageEdit.Controllers
             {
                 return HttpNotFound();
             }
-            return View(photo);
+            var vm = new PhotosCreateViewModel();
+            vm.Photo = photo;
+            vm.Categories = db.Categories.ToList();
+
+            return View(vm);
         }
 
         // POST: Photos/Edit/5
@@ -84,15 +91,16 @@ namespace ImageEdit.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ImagePath,UserId,CategoryId")] Photo photo)
+        public ActionResult Edit(PhotosCreateViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(photo).State = EntityState.Modified;
+                vm.Photo.UserId = User.Identity.GetUserId();
+                db.Entry(vm.Photo).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(photo);
+            return View(vm);
         }
 
         // GET: Photos/Delete/5
