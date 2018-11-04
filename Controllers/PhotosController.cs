@@ -27,6 +27,17 @@ namespace ImageEdit.Controllers
             return View(photos);
         }
 
+        public ActionResult MyPics()
+        {
+            var id = User.Identity.GetUserId();
+            var photos = db.Photos.Where(x => x.UserId == id).ToList();
+            //foreach(var photo in photos)
+            //{
+            //    photo.ImagePath = ConfigurationManager.AppSettings["ImagePathBase"] + photo.ImagePath;
+            //}
+            return View(photos);
+        }
+
         // GET: Photos/Details/5
         public ActionResult Details(int? id)
         {
@@ -34,12 +45,15 @@ namespace ImageEdit.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Photo photo = db.Photos.Find(id);
-            if (photo == null)
+            var vm = new PhotosDetailsViewModel();
+            vm.Photo = db.Photos.Find(id);
+            if (vm.Photo == null)
             {
                 return HttpNotFound();
             }
-            return View(photo);
+            vm.Category = db.Categories.Find(vm.Photo.CategoryId);
+      
+            return View(vm);
         }
 
         // GET: Photos/Create
@@ -127,6 +141,14 @@ namespace ImageEdit.Controllers
             db.Photos.Remove(photo);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult RemovePhoto (int id)
+        {
+            Photo photo = db.Photos.Find(id);
+            photo.UserId = null;
+            db.SaveChanges();
+            return RedirectToAction("MyPics");
         }
 
         protected override void Dispose(bool disposing)

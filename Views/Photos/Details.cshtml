@@ -1,42 +1,24 @@
-﻿@model ImageEdit.Models.Photo
+﻿@model ImageEdit.Models.PhotosDetailsViewModel
+
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
 
 <div>
-    <h4>Photo</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
+            <img src="../../Jpeg/@Model.Photo.ImagePath" alt="" class="imageDetail center"/>
 
-        <dd>
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CategoryId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CategoryId)
-        </dd>
-
-    </dl>
+       
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+<p class="center">
+
+    @Html.DisplayFor(model => model.Category.CategoryType)
+</p>
+<p class="center">
+    @Html.ActionLink("Back to List", "MyPics")
+    @Html.ActionLink(" | Delete", "RemovePhoto", new { id = Model.Photo.Id })
 </p>

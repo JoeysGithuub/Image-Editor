@@ -6,7 +6,7 @@
                 ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Click on photo to edit</h2>
 
 @if (!Request.IsAuthenticated)
 {
@@ -22,8 +22,9 @@
 </p>
 }
 
-<table class="table">
-    <tr>
+<div class="imageGrid">
+    
+    @*<tr>
         <th>
             @Html.DisplayNameFor(model => model.ImagePath)
         </th>
@@ -38,15 +39,19 @@
 
             <th></th>
         }
-        </tr>
+        </tr>*@
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <img src="../../Jpeg/@item.ImagePath" alt="" />
-            </td>
-            <td>
+
+       
+            @foreach (var item in Model)
+            {
+            <div class="imageGridItem">
+                <a href="/Photos/Edit/@item.Id">
+                    <img src="../../Jpeg/@item.ImagePath" alt="" width="500" />
+                </a>
+            </div>
+            }
+            @*<td>
                 @Html.DisplayFor(modelItem => item.UserId)
             </td>
             <td>
@@ -59,8 +64,7 @@
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })
             </td>
-            }
-        </tr>
-    }
+            }*@
+     
 
-</table>
+</div>
