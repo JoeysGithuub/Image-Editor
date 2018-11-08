@@ -1,17 +1,29 @@
-﻿@model ImageEdit.Models.PhotosCreateViewModel
+﻿
+ @model ImageEdit.Models.PhotosCreateViewModel
 
 @{
-    ViewBag.Title = "Edit";
+                /**/
+
+                ViewBag.Title = "Edit";
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js"></script>
 
-<h2>Edit</h2>
+@*<h2>Edit</h2>*@
 
 
 <div class="form-horizontal">
-    <h4>Photo</h4>
+    <h4>Edit and Save</h4>
     <hr />
-    <img id="canvas" src="../../Jpeg/@Model.Photo.ImagePath" alt="" />
+    @*<img id="canvas" src="../../Jpeg/@Model.Photo.ImagePath" alt="" />*@
+
+    @if (string.IsNullOrWhiteSpace(Model.Photo.UserId))
+    {
+        <img id="canvas"  src="../../Jpeg/@Model.Photo.ImagePath" alt="" class="imageDetail center" />
+    }
+    else
+    {
+        <img id="canvas"  src="../../UserImages/@Model.Photo.ImagePath" alt="" class="imageDetail center" />
+    }
 
     <div class="filter-buttons">
         <div class="filter-group">
@@ -88,20 +100,19 @@
         <button id="majestic-btn">Her Majesty</button>
     </div>
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "photoForm" }))
     {
-
         @Html.AntiForgeryToken();
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Photo.Id)
-
-        
+        @Html.HiddenFor(model => model.Photo.ImagePath)
+        @Html.HiddenFor(model => model.Photo.UserId)
 
 
         <div class="form-group">
-        <label class="control-label col-md-2">
-            Category
-        </label>
+            <label class="control-label col-md-2">
+                Category
+            </label>
             <div class="col-md-2">
                 @Html.DropDownListFor(model => model.Photo.CategoryId, Model.Categories.Select(x => new SelectListItem { Text = x.CategoryType.ToString(), Value = x.Id.ToString() }), new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Photo.CategoryId, "", new { @class = "text-danger" })
@@ -110,11 +121,11 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="button" id="submit-btn" value="Save" class="btn btn-default" />
             </div>
         </div>
     }
-    </div>
+</div>
 
 <div>
     @Html.ActionLink("Back to List", "Index")
@@ -153,7 +164,7 @@
         font-size: 2em;
     }
 
-    img, 
+    img,
     canvas {
         margin-bottom: 40px;
         background: #ececec;
@@ -225,8 +236,39 @@
     var img = new Image();
     var canvas = document.getElementById("canvas");
     var fileName = "";
-
+    function SaveUserPhoto() {
+        Caman('#canvas', function () {
+            this.render(function () {
+                var image = this.toBase64();
+                //var formData = new FormData();
+                var fileName = $('#Photo_ImagePath').val();
+                var categoryId = $('#Photo_CategoryId').val();
+              //  alert(123)
+                console.log(categoryId);
+                //formData.append('ImageName', fileName);
+                //formData.append('FileUpload', image);
+                //var token = $('input[name="__RequestVerificationToken"]').val();
+                //formData.append('__RequestVerificationToken', token);
+                var dataString = { FileName: fileName, Image: image, CategoryId: categoryId, id:@Model.Photo.Id};
+                console.log(dataString);
+                //var dataString = JSON.stringify({ FileName: fileName, Image: image, CategoryId: categoryId , id:@Model.Photo.Id});
+                $.ajax({
+                    //type: 'POST',
+                    method:'POST',
+                    url: '@Url.Action("UploadImage", "Photos")',
+                    contentType: false,//'application/x-www-form-urlencoded',
+                    processData: false, 
+                    //contentType: 'application/json; charset=utf-8',
+                    data: dataString
+                });
+            });
+        });
+    }
     $(document).ready(function () {
+        $('#submit-btn').click(function () {
+            SaveUserPhoto();
+            //$('#photoForm').submit();
+        });
         $("#brightness-inc").on("click", function (e) {
             Caman("#canvas", img, function () {
                 this.brightness(10).render();
@@ -449,6 +491,7 @@
             lnk.fireEvent("onclick");
         }
     }
+
 
 </script>
 @section Scripts {

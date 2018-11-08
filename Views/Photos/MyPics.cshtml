@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<ImageEdit.Models.Photo>
 
 @{
-                /**/
+    /**/
 
-                ViewBag.Title = "Index";
+    ViewBag.Title = "Index";
 }
 
-<h2>Click on photo to edit</h2>
+<h2></h2>
 
 @if (!Request.IsAuthenticated)
 {
@@ -15,15 +15,15 @@
     </div>
 }
 
-@if (Request.IsAuthenticated)
-{
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-}
+@*@if (Request.IsAuthenticated)
+    {
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    }*@
 
 <div class="imageGrid">
-    
+
     @*<tr>
         <th>
             @Html.DisplayNameFor(model => model.ImagePath)
@@ -42,29 +42,29 @@
         </tr>*@
 
 
-       
-            @foreach (var item in Model)
-            {
-            <div class="imageGridItem">
-                <a href="/Photos/Details/@item.Id">
-                    <img src="../../Jpeg/@item.ImagePath" alt="" width="500" />
-                </a>
-            </div>
-            }
-            @*<td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryId)
-            </td>
-            @if (Request.IsAuthenticated)
-            {
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-            }*@
-     
+
+    @foreach (var item in Model)
+    {
+        <div class="imageGridItem">
+            <a href="/Photos/Details/@item.Id">
+                <img src="../../UserImages/@item.ImagePath" alt="" width="500" />
+            </a>
+        </div>
+    }
+    @*<td>
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CategoryId)
+        </td>
+        @if (Request.IsAuthenticated)
+        {
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </td>
+        }*@
+
 
 </div>

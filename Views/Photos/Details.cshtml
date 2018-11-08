@@ -8,11 +8,16 @@
 
 <div>
     <hr />
-            <img src="../../Jpeg/@Model.Photo.ImagePath" alt="" class="imageDetail center"/>
+    @if (string.IsNullOrWhiteSpace(Model.Photo.UserId))
+    {
+        <img src="../../Jpeg/@Model.Photo.ImagePath" alt="" class="imageDetail center" />
+    }
+    else
+    {
+        <img src="../../UserImages/@Model.Photo.ImagePath" alt="" class="imageDetail center" />
+    }
 
 
-
-       
 </div>
 <p class="center">
 
@@ -20,5 +25,6 @@
 </p>
 <p class="center">
     @Html.ActionLink("Back to List", "MyPics")
+    @Html.ActionLink(" | Edit", "Edit", new { id = Model.Photo.Id })
     @Html.ActionLink(" | Delete", "RemovePhoto", new { id = Model.Photo.Id })
 </p>
