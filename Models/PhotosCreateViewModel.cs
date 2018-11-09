@@ -9,5 +9,6 @@ namespace ImageEdit.Models
     {
         public IEnumerable<Category> Categories { get; set; }
         public Photo Photo { get; set; }
+
     }
 }

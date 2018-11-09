@@ -361,52 +361,63 @@ namespace ImageEdit.Controllers
             // return View(vm);
             return RedirectToAction("Index");
         }
+        
         [HttpPost]
-        public void UploadImage(UploadImageModel model)
-        {
-            const string prefix = "data:image/png;base64,";
-            string path = AppDomain.CurrentDomain.BaseDirectory + "UserImages";
-            var fileName = User.Identity.GetUserId() + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss") + "-" + model.FileName;
-
-            var photo = db.Photos.FirstOrDefault(p => p.Id == model.Id);
-            var userId = User?.Identity?.GetUserId();
-
-            if (photo == null || photo.UserId != userId)
+        public ActionResult UploadImage(UploadImageModel model)
+        {      
+            var x = 1;
+            UploadImageModel md = model;
+            try
             {
-                photo = new Photo
+                const string prefix = "data:image/png;base64,";
+                string path = AppDomain.CurrentDomain.BaseDirectory + "UserImages";
+                var fileName = User.Identity.GetUserId() + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss") + "-" + model.FileName;
+
+                var photo = db.Photos.FirstOrDefault(p => p.Id == model.Id);
+                var userId = User?.Identity?.GetUserId();
+
+                if (photo == null || photo.UserId != userId)
                 {
-                    UserId = User.Identity.GetUserId(),
-                    ImagePath = fileName,
-                    CategoryId = model.CategoryId // category is not passed in update the model to add it
-                };
-                db.Photos.Add(photo);
-            }
-            else
-            {
-                photo.ImagePath = fileName;
-            }
-
-            db.SaveChanges();
-
-            using (FileStream fs = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-            {
-                using (BinaryWriter bw = new BinaryWriter(fs))
-                {
-                    string base64;
-                    if (model.Image.StartsWith(prefix))
+                    photo = new Photo
                     {
-                        base64 = model.Image.Substring(prefix.Length);
-                    }
-                    else
-                    {
-                        base64 = model.Image;
-                    }
-                    byte[] data = Convert.FromBase64String(base64);
-                    bw.Write(data);
-                    bw.Close();
+                        UserId = User.Identity.GetUserId(),
+                        ImagePath = fileName,
+                        CategoryId = model.CategoryId // category is not passed in update the model to add it
+                    };
+                    db.Photos.Add(photo);
                 }
-            }
+                else
+                {
+                    photo.ImagePath = fileName;
+                }
 
+                db.SaveChanges();
+
+                using (FileStream fs = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                {
+                    using (BinaryWriter bw = new BinaryWriter(fs))
+                    {
+                        string base64;
+                        if (model.Image.StartsWith(prefix))
+                        {
+                            base64 = model.Image.Substring(prefix.Length);
+                        }
+                        else
+                        {
+                            base64 = model.Image;
+                        }
+                        byte[] data = Convert.FromBase64String(base64);
+                        bw.Write(data);
+                        bw.Close();
+                    }
+                }
+
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            }
+            catch( Exception ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
         }
 
         // GET: Photos/Delete/5

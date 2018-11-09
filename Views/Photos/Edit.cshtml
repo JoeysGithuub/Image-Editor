@@ -249,16 +249,18 @@
                 //formData.append('FileUpload', image);
                 //var token = $('input[name="__RequestVerificationToken"]').val();
                 //formData.append('__RequestVerificationToken', token);
-                var dataString = { FileName: fileName, Image: image, CategoryId: categoryId, id:@Model.Photo.Id};
+                var dataString = { FileName: fileName, Image: image, CategoryId: parseInt(categoryId), Id:@Model.Photo.Id};
+                //console.log(dataString);
+                //var dataString = JSON.stringify({ FileName: fileName, Image: image, CategoryId: categoryId, id:@Model.Photo.Id});
                 console.log(dataString);
-                //var dataString = JSON.stringify({ FileName: fileName, Image: image, CategoryId: categoryId , id:@Model.Photo.Id});
+
                 $.ajax({
-                    //type: 'POST',
-                    method:'POST',
-                    url: '@Url.Action("UploadImage", "Photos")',
-                    contentType: false,//'application/x-www-form-urlencoded',
-                    processData: false, 
-                    //contentType: 'application/json; charset=utf-8',
+                    type: 'POST',
+                   method:'POST',
+                    url: '/Photos/UploadImage',//@Url.Action("UploadImage", "Photos")',
+                     contentType: 'application/x-www-form-urlencoded',
+                    //processData: false, 
+                    //contentType: 'json',
                     data: dataString
                 });
             });
